@@ -9,12 +9,31 @@
 
                 <div class="panel-body">
                 @include('...common.messages')
+                <?php
+                $roles_rus_name = [
+                    1=>'Администратор',
+                    2=>'Модератор',
+                    3=>'Редактор минералов',
+                    4=>'Редактор новостей',
+                    5=>'Простой пользователь'
+                ];
+                ?>
 
                     @foreach ($users as $user)
-                        <div>{{ $user->name . ' (' . $user->role->name . ')'}}</div>
-                        <div class="btn-group">
-                          <button id="delete_user" class="btn btn-danger" data-user-id="{{ $user->id }}">Удалить</button>
-                          <button id="change_role" class="btn btn-primary" data-user-id="{{ $user->id }}" data-role-id="3">Назначить редактором</button>
+                        <div>{{ $user->name . ' ( ' . $roles_rus_name[$user->role_id] . ' )'}}</div>
+                        <div class="btn-group" role="group">
+                            <div class="btn-group" role="group">
+                              <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Назначить <span class="caret"></span>
+                              </button>
+                              <ul class="dropdown-menu">
+                                <li><a href="#" id="change_role" data-user-id="{{ $user->id }}" data-role-id="1">Администратором</a></li>
+                                <li><a href="#" id="change_role" data-user-id="{{ $user->id }}" data-role-id="2">Модератором</a></li>
+                                <li><a href="#" id="change_role" data-user-id="{{ $user->id }}" data-role-id="3">Редактором минералов</a></li>
+                                <li><a href="#" id="change_role" data-user-id="{{ $user->id }}" data-role-id="4">Редактором новостей</a></li>
+                                <li><a href="#" id="change_role" data-user-id="{{ $user->id }}" data-role-id="5">Простым пользователем</a></li>
+                              </ul>
+                            </div>
+                            <button id="delete_user" class="btn btn-danger" data-user-id="{{ $user->id }}">Удалить</button>
                         </div>
                         <hr>
                     @endforeach

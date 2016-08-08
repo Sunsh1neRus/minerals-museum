@@ -104,7 +104,7 @@ class ImagesController extends Controller
         //создание изображения
         $img_o = Image::make($request->file('image'));
         // watermark
-        $watermark = Image::make(public_path() . '/images/watermark.png')->resize(round($img_o->width() * 0.1), round($img_o->height() * 0.1), function ($constraint) {
+        $watermark = Image::make(public_path() . '/images/watermark.png')->resize(round($img_o->width() * 0.15), round($img_o->height() * 0.15), function ($constraint) {
             $constraint->aspectRatio();
         });
         $ar_position = [

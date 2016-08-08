@@ -9,7 +9,7 @@
 
     <ul>
       @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
+        <li>{!! clean($error,'links_only') !!}</li>
       @endforeach
     </ul>
   </div>
@@ -24,7 +24,7 @@
 
     <ul>
       @foreach (Session::get('warning') as $v)
-        <li>{{ $v }}</li>
+        <li>{!! clean($v,'links_only') !!}</li>
       @endforeach
     </ul>
   </div>
@@ -39,7 +39,7 @@
 
     <ul>
       @foreach (Session::get('success') as $v)
-        <li>{{ $v }}</li>
+        <li>{!! clean($v,'links_only') !!}</li>
       @endforeach
     </ul>
   </div>
@@ -54,7 +54,7 @@
 
     <ul>
       @foreach (Session::get('info') as $v)
-        <li>{!! $v !!}</li>
+        <li>{!! clean($v,'links_only') !!}</li>
       @endforeach
     </ul>
   </div>

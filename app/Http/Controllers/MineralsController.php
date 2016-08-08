@@ -38,7 +38,7 @@ class MineralsController extends Controller
     public function show(Request $request, $id)
     {
         // получаем минерал
-        $mineral = Mineral::with('user', 'mineralsImages')->where('id', $id)->first();
+        $mineral = Mineral::with('user', 'mineralsImages', 'lastUpdater')->where('id', $id)->first();
         if (is_null($mineral)) {
             return redirect('/')->withErrors(['Такого минерала у нас нет.'])->setStatusCode(404);
         }
@@ -115,6 +115,8 @@ class MineralsController extends Controller
 
         if ($request->has('seen') AND $request->user()->is('admin|moderator')) {
             $ar_data['seen'] = (bool)$request->seen;
+        } else {
+            $ar_data['seen'] = false;
         }
 
         $mineral = $request->user()->minerals()->create($ar_data);
@@ -195,7 +197,7 @@ class MineralsController extends Controller
             'images_ids' => ['array', 'max:30'],
             'main_image_id' => ['integer', 'min:1'],
 
-            'name' => ['required', 'string', 'max:255', 'unique:minerals,name'],
+            'name' => ['required', 'string', 'max:255'],
             'description' => ['string', 'max:4000'],
             'class' => ['string', 'max:255'],
             'hardness_before' => 'custom_numeric:0,10',
@@ -213,8 +215,6 @@ class MineralsController extends Controller
             'chemical_formula' => 'string|max:255',
             'deposit' => 'string|max:2000',
             'seen' => 'boolean',
-        ], [
-            'name.unique' => 'Минерал с таким названием уже есть.',
         ]);
 
         mb_internal_encoding("UTF-8");
@@ -246,13 +246,23 @@ class MineralsController extends Controller
 
         if ($request->has('seen') AND $request->user()->is('admin|moderator')) {
             $ar_data['seen'] = (bool)$request->seen;
+        } else {
+            $ar_data['seen'] = false;
+        }
+
+        $dubl_name_min = Mineral::where('name', $ar_data['name'])->where('id', '!=', $mineral->id)->first();
+        if ($dubl_name_min) {
+            return back()->withErrors(['Минерал с таким именем уже есть. <a class="alert-link" href="/minerals/' . $dubl_name_min->id . '">Перейдите, чтобы увидеть его.</a>'])->withInput();
         }
 
         $mineral->update($ar_data);
 
         // TODO сделать так:
-        // забрать ве предыдущие изображения этого минерала
-        // создать 2 списка, которые удалить и которые добавить
+        // отвязываю все ранее привязанные изображения
+        // убрать везде пометку, что изображение главное
+        // привязываю переданные
+        MineralsImage::where('mineral_id', $mineral->id)->update(['main_image_of_mineral' => false, 'mineral_id' => null]);
+
         $images_ids = $request->images_ids;
         $main_image_id = (int)$request->main_image_id;
         if (is_array($images_ids) AND !empty($images_ids)) {
@@ -274,14 +284,14 @@ class MineralsController extends Controller
                     if (!($main_image_id >= 1) OR !in_array($main_image_id, $checked_images_ids, true)) {
                         $main_image_id = $checked_images_ids[array_rand($checked_images_ids)];
                     }
-                    MineralsImage::where('id', $main_image_id)->update(['main_image_of_mineral' => true]);
+                    MineralsImage::where('idi', $main_image_id)->update(['main_image_of_mineral' => true]);
                 } catch (\Exception $e) {
-                    return redirect('/minerals/create')->withSuccess(['Минерал добавлен.'])->withError(['Прикрепить изображения к минералу или назначить главное изображение не вышло.'])->withInfo(['<a href="' . \Config::get('app.url') . request()->route()->getPrefix() . '/' . $mineral->id . '" class="alert-link">Перейти</a> к добавленному минералу.']);
+                    return back()->withSuccess(['Информация о минерале обновлена.'])->withError(['Прикрепить изображения к минералу или назначить главное изображение не вышло.'])->withInfo(['<a href="' . \Config::get('app.url') . request()->route()->getPrefix() . '/' . $mineral->id . '" class="alert-link">Перейтик обновлённому минералу.</a>']);
                 }
             }
         }
 
-        return redirect('/minerals/create')->withSuccess(['Минерал добавлен.'])->withInfo(['<a href="' . \Config::get('app.url') . request()->route()->getPrefix() . '/' . $mineral->id . '" class="alert-link">Перейти к добавленному минералу.</a>']);
+        return back()->withSuccess(['Информация о минерале обновлена.'])->withInfo(['<a href="' . \Config::get('app.url') . request()->route()->getPrefix() . '/' . $mineral->id . '" class="alert-link">Перейти к обновлённому минералу.</a>']);
     }
 
     //public function post
@@ -303,7 +313,7 @@ class MineralsController extends Controller
 
         $field = $request->field;
 
-        $result = Mineral::where($field, 'like', $request->term . '%')->take(6)->orderBy($field)->get([$field]);
+        $result = Mineral::where($field, 'like', $request->term . '%')->take(6)->orderBy($field)->distinct()->get([$field]);
 
         $ar_resp = [];
         foreach ($result as $v) {

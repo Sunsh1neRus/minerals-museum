@@ -18,11 +18,13 @@
 
                     <div id="minerals">
                     @foreach ($minerals as $mineral)
-                        <div class="media">
-                          <a class="pull-left" href="/minerals/{{ $mineral->id }}">
-                            <img class="media-object" src="{{ (!empty($mineral->mineralsImages[0]))?$mineral->mineralsImages[0]->url_middle:'/images/non-image-148x223.jpeg' }}" style="max-width: 300px; max-height: 200px;">
+                        <div class="row">
+                        <div class="col-md-4">
+                          <a href="/minerals/{{ $mineral->id }}">
+                            <img class="thumbnail img-responsive center-block" src="{{ (!empty($mineral->mineralsImages[0]))?$mineral->mineralsImages[0]->url_middle:'/images/non-image-middle.jpg' }}">
                           </a>
-                          <div class="media-body">
+                        </div>
+                          <div class="col-md-8">
                             <a href="/minerals/{{ $mineral->id }}"><h4 class="media-heading">{{ $mineral->name }}</h4></a>
 
                             <ul>
@@ -30,7 +32,6 @@
                                 <li>Химическая формула: {!! clean($mineral->chemical_formula,'chemical_formula') !!}</li>
                                 <li>Происхождение: {{ $mineral->genesis }}</li>
                             </ul>
-                          </div>
                           <div class="pull-left media-bottom bottom-left">
                               <span class="posted-on">
                                   <i class="glyphicon glyphicon-time"> </i>
@@ -42,6 +43,7 @@
                                       <a class="url fn n" href="/users/{{ $mineral->user_id }}">{{ $mineral->user->name }}</a>
                                   </span>
                               </span>
+                          </div>
                           </div>
                         </div>
                         <hr>

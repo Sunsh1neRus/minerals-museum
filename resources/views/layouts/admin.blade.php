@@ -16,10 +16,12 @@
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="{{ URL::asset('assets/css/app.css') }}" />
 
     <style>
         body {
-            font-family: 'Lato';
+            font-family: 'Open Sans';
         }
 
         .fa-btn {
@@ -27,7 +29,7 @@
         }
     </style>
 </head>
-<body id="app-layout">
+<body id="app-layout" style="background-color: #f3f3f3">
     <nav class="navbar navbar-default navbar-static-top">
         <div class="container">
             <div class="navbar-header">
@@ -41,16 +43,18 @@
                 </button>
 
                 <!-- Branding Image -->
-                <a class="navbar-brand" href="{{ url('/') }}">
-                    Главная
-                </a>
+                <h1 class="logo">
+                    <a class="navbar-brand" href="{{ url('/') }}">
+                        <i class="fa fa-diamond fa-2" aria-hidden="true"></i> Главная
+                    </a>
+                </h1>
             </div>
 
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url('/admin') }}">Админ панель</a></li>
-                    <li><a href="{{ url('/admin/users') }}">Пользователи</a></li>
+                    <li{{ Request::is('admin') ? ' class=active' : null }}><a href="{{ url('/admin') }}"> Админ панель</a></li>
+                    <li{{ Request::is('admin/users') ? ' class=active' : null }}><a href="{{ url('/admin/users') }}"> Пользователи</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->
@@ -71,6 +75,35 @@
     </nav>
 
     @yield('content')
+
+    <footer class="footer">
+        <div style="background-color: #2e3038; width: 100%; min-height: 100%;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="col-md-4 footer-col">
+                            <ul>
+                                <li{{ Request::is('/') ? ' class=active' : null }}><a href="{{ url('/') }}">Главная</a></li>
+                                <li{{ Request::is('minerals') ? ' class=active' : null }}><a href="{{ url('/minerals') }}">Все минералы</a></li>
+                                @if (!is_null(request()->user()) AND request()->user()->is('admin|moderator|editor'))
+                                    <li{{ Request::is('minerals/create') ? ' class=active' : null }}><a href="{{ url('/minerals/create') }}">Добавить минерал</a></li>
+                                @endif
+                                <li{{ Request::is('about') ? ' class=active' : null }}><a href="{{ url('/about') }}">О нас</a></li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 footer-col">Вторая колонка<br>Some shit</div>
+                        <div class="col-md-4 footer-col">Третья колонка<br>Some shit/path 2</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <hr>
+                    <div class="col-md-10 col-md-offset-1">
+                        <p>&copy; 2016 mooagi.ru - "Музей Института Нефти и Газа СКФУ". Все права защищены. Копирование, распространение или использование материала допускается только с разрешения администрации.</p>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </footer>
 
     <!-- JavaScripts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.min.js" integrity="sha384-I6F5OKECLVtK/BL+8iSLDEHowSAfUo76ZL9+kGAgTRdiByINKJaqTPH/QVNS1VDb" crossorigin="anonymous"></script>

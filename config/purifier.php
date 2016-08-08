@@ -33,6 +33,11 @@ return [
             'HTML.Allowed' => 'sub,sup',
             'AutoFormat.RemoveEmpty' => true,
         ],
+        'links_only' => [
+            'HTML.Doctype' => 'XHTML 1.0 Strict',
+            'HTML.Allowed' => 'a[href|title|class]',
+            'AutoFormat.RemoveEmpty' => true,
+        ],
         "youtube" => [
             "HTML.SafeIframe" => 'true',
             "URI.SafeIframeRegexp" => "%^(http://|https://|//)(www.youtube.com/embed/|player.vimeo.com/video/)%",

@@ -10,14 +10,13 @@
 
     <!-- Fonts -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css" integrity="sha384-XdYbMnZ/QjLh6iI4ogqCTaIjrFk87ip+ekIjefZch0Y+PvJ8CDYtEs1ipDmPorQ+" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:100,300,400,700">
 
     <!-- jquery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Styles -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:100,300,400,700&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
     {{-- <link href="{{ elixir('css/app.css') }}" rel="stylesheet"> --}}
     <link rel="stylesheet" href="{{ URL::asset('assets/css/app.css') }}" />
 
@@ -55,11 +54,11 @@
             <div class="collapse navbar-collapse" id="app-navbar-collapse">
                 <!-- Left Side Of Navbar -->
                 <ul class="nav navbar-nav">
-                    <li{{ Request::is('minerals') ? ' class=active' : null }}><a href="{{ url('/minerals') }}"><i class="fa fa-th-list fa-2" aria-hidden="true"></i> Все минералы</a></li>
+                    <li{{ Request::is('minerals') ? ' class=active' : null }}><a href="{{ url('/minerals') }}"> Все минералы</a></li>
                     @if (!is_null(request()->user()) AND request()->user()->is('admin|moderator|editor'))
-                        <li{{ Request::is('minerals/create') ? ' class=active' : null }}><a href="{{ url('/minerals/create') }}"><i class="fa fa-plus fa-2" aria-hidden="true"></i> Добавить минерал</a></li>
+                        <li{{ Request::is('minerals/create') ? ' class=active' : null }}><a href="{{ url('/minerals/create') }}"> Добавить минерал</a></li>
                     @endif
-                    <li{{ Request::is('about') ? ' class=active' : null }}><a href="{{ url('/about') }}"><i class="fa fa-building fa-2" aria-hidden="true"></i> О нас</a></li>
+                    <li{{ Request::is('about') ? ' class=active' : null }}><a href="{{ url('/about') }}"> О нас</a></li>
                 </ul>
 
                 <!-- Right Side Of Navbar -->

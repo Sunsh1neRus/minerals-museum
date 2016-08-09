@@ -284,7 +284,7 @@ class MineralsController extends Controller
                     if (!($main_image_id >= 1) OR !in_array($main_image_id, $checked_images_ids, true)) {
                         $main_image_id = $checked_images_ids[array_rand($checked_images_ids)];
                     }
-                    MineralsImage::where('idi', $main_image_id)->update(['main_image_of_mineral' => true]);
+                    MineralsImage::where('id', $main_image_id)->update(['main_image_of_mineral' => true]);
                 } catch (\Exception $e) {
                     return back()->withSuccess(['Информация о минерале обновлена.'])->withError(['Прикрепить изображения к минералу или назначить главное изображение не вышло.'])->withInfo(['<a href="' . \Config::get('app.url') . request()->route()->getPrefix() . '/' . $mineral->id . '" class="alert-link">Перейтик обновлённому минералу.</a>']);
                 }

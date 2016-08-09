@@ -33,7 +33,7 @@
                                 <li><a href="#" id="change_role" data-user-id="{{ $user->id }}" data-role-id="5">Простым пользователем</a></li>
                               </ul>
                             </div>
-                            <button id="delete_user" class="btn btn-danger" data-user-id="{{ $user->id }}">Удалить</button>
+                            <button id="delete_user" class="btn btn-danger" data-user-id="{{ $user->id }}"><i class="fa fa-trash-o"></i> Удалить</button>
                         </div>
                         <hr>
                     @endforeach
